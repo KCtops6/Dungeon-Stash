@@ -1,4 +1,16 @@
 {
   "item.dungeon_stash.dungeon_loot_bag": "Dungeon Loot Bag",
+  "item.dungeon_stash.starter_loot_bag": "Starter Loot Bag",
+  "item.dungeon_stash.stronghold_loot_bag": "Stronghold Loot Bag",
+  "item.dungeon_stash.nether_fortress_loot_bag": "Nether Fortress Loot Bag",
+  "item.dungeon_stash.end_city_loot_bag": "End City Loot Bag",
+  "item.dungeon_stash.igloo_loot_bag": "Igloo Loot Bag",
+  "item.dungeon_stash.woodland_mansion_loot_bag": "Woodland Mansion Loot Bag",
+  "item.dungeon_stash.shipwreck_loot_bag": "Shipwreck Loot Bag",
+  "item.dungeon_stash.buried_treasure_loot_bag": "Buried Treasure Loot Bag",
+  "item.dungeon_stash.pillager_outpost_loot_bag": "Pillager Outpost Loot Bag",
+  "item.dungeon_stash.bastion_remnant_loot_bag": "Bastion Remnant Loot Bag",
+  "item.dungeon_stash.ruined_portal_loot_bag": "Ruined Portal Loot Bag",
+  "item.dungeon_stash.ancient_city_loot_bag": "Ancient City Loot Bag",
   "itemGroup.dungeon_stash.dungeon_stash_tab": "Dungeon Stash"
 }

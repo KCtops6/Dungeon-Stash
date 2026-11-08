@@ -1,5 +1,8 @@
 package me.kctops6.dungeonstash;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -7,8 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -30,13 +33,13 @@ public class DungeonBagMenu extends AbstractContainerMenu {
         this.bagContainer = container;
         this.bagStack = bagStack;
 
-        // Bag slots (3 rows of 9) - Read-only (players cannot insert items into these slots)
+        // Bag slots (3 rows of 9) - Read-only
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlot(new Slot(container, col + row * 9, 8 + col * 18, 18 + row * 18) {
                     @Override
                     public boolean mayPlace(ItemStack stack) {
-                        return false; // Prevent inserting items into the bag
+                        return false;
                     }
                 });
             }
@@ -58,17 +61,24 @@ public class DungeonBagMenu extends AbstractContainerMenu {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        // Check if the bag container has become completely empty during interaction
-        if (!bagStack.isEmpty() && bagStack.getItem() instanceof DungeonLootBagItem) {
+
+        if (!bagStack.isEmpty() && bagStack.getItem() instanceof Item) {
+            // Save current container state to item NBT
+            ListTag listTag = new ListTag();
             boolean isEmpty = true;
             for (int i = 0; i < bagContainer.getContainerSize(); i++) {
-                if (!bagContainer.getItem(i).isEmpty()) {
+                ItemStack stack = bagContainer.getItem(i);
+                if (!stack.isEmpty()) {
                     isEmpty = false;
-                    break;
+                    CompoundTag itemTag = new CompoundTag();
+                    itemTag.putByte("Slot", (byte) i);
+                    stack.save(itemTag);
+                    listTag.add(itemTag);
                 }
             }
+
             if (isEmpty) {
-                // If viewed by a player, close their container screen and consume the bag
+                // Close player container immediately and consume bag
                 for (Slot slot : this.slots) {
                     if (slot.container instanceof Inventory playerInv) {
                         Player player = playerInv.player;
@@ -78,7 +88,11 @@ public class DungeonBagMenu extends AbstractContainerMenu {
                         break;
                     }
                 }
+                bagStack.setTag(null);
                 bagStack.shrink(1);
+            } else {
+                CompoundTag tag = bagStack.getOrCreateTag();
+                tag.put("BagInventory", listTag);
             }
         }
     }
@@ -100,7 +114,6 @@ public class DungeonBagMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                // Do not allow shift-clicking items from player inventory *into* the bag slots
                 return ItemStack.EMPTY;
             }
 
