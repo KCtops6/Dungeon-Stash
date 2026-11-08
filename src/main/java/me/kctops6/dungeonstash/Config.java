@@ -1,64 +1,63 @@
 package me.kctops6.dungeonstash;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = DungeonStash.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config
-{
+public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-            .comment("Whether to log the dirt block on common setup")
-            .define("logDirtBlock", true);
+    private static final ForgeConfigSpec.BooleanValue GUI_MODE_SETTING = BUILDER
+            .comment("True = Open GUI inventory that destroys item when emptied; false = Populate items directly into player inventory or drop on ground.")
+            .define("guiMode", true);
 
-    private static final ForgeConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-            .comment("A magic number")
-            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
+    // Mob drop configurations
+    public static final ForgeConfigSpec.BooleanValue ZOMBIE_DROP_ENABLED = BUILDER
+            .comment("Enable loot bag drops from Zombies")
+            .define("zombieDropEnabled", true);
+    public static final ForgeConfigSpec.DoubleValue ZOMBIE_DROP_CHANCE = BUILDER
+            .comment("Drop chance percentage for Zombies (0.0 to 100.0)")
+            .defineInRange("zombieDropChance", 2.5, 0.0, 100.0);
 
-    public static final ForgeConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-            .comment("What you want the introduction message to be for the magic number")
-            .define("magicNumberIntroduction", "The magic number is... ");
+    public static final ForgeConfigSpec.BooleanValue SKELETON_DROP_ENABLED = BUILDER
+            .comment("Enable loot bag drops from Skeletons")
+            .define("skeletonDropEnabled", true);
+    public static final ForgeConfigSpec.DoubleValue SKELETON_DROP_CHANCE = BUILDER
+            .comment("Drop chance percentage for Skeletons (0.0 to 100.0)")
+            .defineInRange("skeletonDropChance", 2.5, 0.0, 100.0);
 
-    // a list of strings that are treated as resource locations for items
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-            .comment("A list of items to log on common setup.")
-            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
+    public static final ForgeConfigSpec.BooleanValue SPIDER_DROP_ENABLED = BUILDER
+            .comment("Enable loot bag drops from Spiders")
+            .define("spiderDropEnabled", true);
+    public static final ForgeConfigSpec.DoubleValue SPIDER_DROP_CHANCE = BUILDER
+            .comment("Drop chance percentage for Spiders (0.0 to 100.0)")
+            .defineInRange("spiderDropChance", 2.5, 0.0, 100.0);
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
-    public static boolean logDirtBlock;
-    public static int magicNumber;
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;
-
-    private static boolean validateItemName(final Object obj)
-    {
-        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
-    }
+    public static boolean guiMode = true;
+    public static boolean zombieDropEnabled;
+    public static double zombieDropChance;
+    public static boolean skeletonDropEnabled;
+    public static double skeletonDropChance;
+    public static boolean spiderDropEnabled;
+    public static double spiderDropChance;
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
-    {
-        logDirtBlock = LOG_DIRT_BLOCK.get();
-        magicNumber = MAGIC_NUMBER.get();
-        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
+    static void onLoad(final ModConfigEvent event) {
+        guiMode = GUI_MODE_SETTING.get();
+        zombieDropEnabled = ZOMBIE_DROP_ENABLED.get();
+        zombieDropChance = ZOMBIE_DROP_CHANCE.get();
+        skeletonDropEnabled = SKELETON_DROP_ENABLED.get();
+        skeletonDropChance = SKELETON_DROP_CHANCE.get();
+        spiderDropEnabled = SPIDER_DROP_ENABLED.get();
+        spiderDropChance = SPIDER_DROP_CHANCE.get();
+    }
 
-        // convert the list of strings into a set of items
-        items = ITEM_STRINGS.get().stream()
-                .map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)))
-                .collect(Collectors.toSet());
+    public static void setGuiMode(boolean mode) {
+        guiMode = mode;
+        GUI_MODE_SETTING.set(mode);
     }
 }
