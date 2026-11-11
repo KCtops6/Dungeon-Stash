@@ -1,6 +1,10 @@
 package me.kctops6.dungeonstash;
 
 import com.mojang.logging.LogUtils;
+import me.kctops6.dungeonstash.item.AncientCityLootBagItem;
+import me.kctops6.dungeonstash.item.ThemedLootBagItem;
+import me.kctops6.dungeonstash.menu.DungeonBagMenu;
+import me.kctops6.dungeonstash.screen.DungeonBagScreen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -9,8 +13,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -28,10 +30,8 @@ import org.slf4j.Logger;
 public class DungeonStash {
     public static final String MODID = "dungeon_stash";
     private static final Logger LOGGER = LogUtils.getLogger();
-
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-
     public static final RegistryObject<Item> DUNGEON_LOOT_BAG = ITEMS.register("dungeon_loot_bag",
             () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.SIMPLE_DUNGEON));
     public static final RegistryObject<Item> STARTER_LOOT_BAG = ITEMS.register("starter_loot_bag",
@@ -58,7 +58,6 @@ public class DungeonStash {
             () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.RUINED_PORTAL));
     public static final RegistryObject<Item> ANCIENT_CITY_LOOT_BAG = ITEMS.register("ancient_city_loot_bag",
             () -> new AncientCityLootBagItem(new Item.Properties().stacksTo(16)));
-
     public static final RegistryObject<CreativeModeTab> DUNGEON_STASH_TAB = CREATIVE_MODE_TABS.register("dungeon_stash_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> DUNGEON_LOOT_BAG.get().getDefaultInstance())
@@ -78,7 +77,6 @@ public class DungeonStash {
                 output.accept(RUINED_PORTAL_LOOT_BAG.get());
                 output.accept(ANCIENT_CITY_LOOT_BAG.get());
             }).build());
-
     public DungeonStash() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
@@ -88,9 +86,7 @@ public class DungeonStash {
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
-
     private void commonSetup(final FMLCommonSetupEvent event) {}
-
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
