@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dungeon_stash:item/igloo_loot_bag"
+  }
+}

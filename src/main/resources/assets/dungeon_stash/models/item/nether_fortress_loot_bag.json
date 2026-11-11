@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dungeon_stash:item/nether_fortress_loot_bag"
+  }
+}

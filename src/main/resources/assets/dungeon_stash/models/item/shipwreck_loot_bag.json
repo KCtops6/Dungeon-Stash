@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dungeon_stash:item/shipwreck_loot_bag"
+  }
+}

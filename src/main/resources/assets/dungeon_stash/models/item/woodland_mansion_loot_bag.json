@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dungeon_stash:item/woodland_mansion_loot_bag"
+  }
+}
