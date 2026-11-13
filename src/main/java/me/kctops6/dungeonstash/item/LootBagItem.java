@@ -24,13 +24,31 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class ThemedLootBagItem extends Item {
-    private final ResourceLocation lootTableId;
-    public ThemedLootBagItem(Properties properties, ResourceLocation lootTableId) {
+public class LootBagItem extends Item {
+    private final ResourceLocation singleLootTableId;
+    private final List<ResourceLocation> lootTableIds;
+
+    public LootBagItem(Properties properties, ResourceLocation lootTableId) {
         super(properties);
-        this.lootTableId = lootTableId;
+        this.singleLootTableId = lootTableId;
+        this.lootTableIds = null;
     }
+
+    public LootBagItem(Properties properties, List<ResourceLocation> lootTableIds) {
+        super(properties);
+        this.singleLootTableId = null;
+        this.lootTableIds = lootTableIds;
+    }
+
+    private ResourceLocation getSelectedLootTable() {
+        if (lootTableIds != null && !lootTableIds.isEmpty()) {
+            return lootTableIds.get(ThreadLocalRandom.current().nextInt(lootTableIds.size()));
+        }
+        return singleLootTableId;
+    }
+
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
@@ -45,7 +63,8 @@ public class ThemedLootBagItem extends Item {
                     if (slot < container.getContainerSize()) container.setItem(slot, ItemStack.of(itemTag));
                 }
             } else {
-                LootTable loottable = serverLevel.getServer().getLootData().getLootTable(this.lootTableId);
+                ResourceLocation chosenTable = getSelectedLootTable();
+                LootTable loottable = serverLevel.getServer().getLootData().getLootTable(chosenTable);
                 LootParams lootparams = new LootParams.Builder(serverLevel)
                         .withParameter(LootContextParams.ORIGIN, player.position())
                         .create(LootContextParamSets.CHEST);

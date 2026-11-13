@@ -1,8 +1,7 @@
 package me.kctops6.dungeonstash;
 
 import com.mojang.logging.LogUtils;
-import me.kctops6.dungeonstash.item.AncientCityLootBagItem;
-import me.kctops6.dungeonstash.item.ThemedLootBagItem;
+import me.kctops6.dungeonstash.item.LootBagItem;
 import me.kctops6.dungeonstash.menu.DungeonBagMenu;
 import me.kctops6.dungeonstash.screen.DungeonBagScreen;
 import net.minecraft.core.registries.Registries;
@@ -26,38 +25,53 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mod(DungeonStash.MODID)
 public class DungeonStash {
     public static final String MODID = "dungeon_stash";
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-    public static final RegistryObject<Item> DUNGEON_LOOT_BAG = ITEMS.register("dungeon_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.SIMPLE_DUNGEON));
+
+
     public static final RegistryObject<Item> STARTER_LOOT_BAG = ITEMS.register("starter_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.SPAWN_BONUS_CHEST));
-    public static final RegistryObject<Item> STRONGHOLD_LOOT_BAG = ITEMS.register("stronghold_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.STRONGHOLD_CORRIDOR));
-    public static final RegistryObject<Item> NETHER_FORTRESS_LOOT_BAG = ITEMS.register("nether_fortress_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.NETHER_BRIDGE));
-    public static final RegistryObject<Item> END_CITY_LOOT_BAG = ITEMS.register("end_city_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.END_CITY_TREASURE));
-    public static final RegistryObject<Item> IGLOO_LOOT_BAG = ITEMS.register("igloo_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.IGLOO_CHEST));
-    public static final RegistryObject<Item> WOODLAND_MANSION_LOOT_BAG = ITEMS.register("woodland_mansion_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.WOODLAND_MANSION));
-    public static final RegistryObject<Item> SHIPWRECK_LOOT_BAG = ITEMS.register("shipwreck_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.SHIPWRECK_TREASURE));
-    public static final RegistryObject<Item> BURIED_TREASURE_LOOT_BAG = ITEMS.register("buried_treasure_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.BURIED_TREASURE));
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.SPAWN_BONUS_CHEST));
+
+    public static final RegistryObject<Item> DUNGEON_LOOT_BAG = ITEMS.register("dungeon_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.SIMPLE_DUNGEON));
     public static final RegistryObject<Item> PILLAGER_OUTPOST_LOOT_BAG = ITEMS.register("pillager_outpost_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.PILLAGER_OUTPOST));
-    public static final RegistryObject<Item> BASTION_REMNANT_LOOT_BAG = ITEMS.register("bastion_remnant_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.BASTION_TREASURE));
-    public static final RegistryObject<Item> RUINED_PORTAL_LOOT_BAG = ITEMS.register("ruined_portal_loot_bag",
-            () -> new ThemedLootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.RUINED_PORTAL));
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.PILLAGER_OUTPOST));
+    public static final RegistryObject<Item> SHIPWRECK_LOOT_BAG = ITEMS.register("shipwreck_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.SHIPWRECK_TREASURE));
+    public static final RegistryObject<Item> BURIED_TREASURE_LOOT_BAG = ITEMS.register("buried_treasure_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.BURIED_TREASURE));
+    public static final RegistryObject<Item> IGLOO_LOOT_BAG = ITEMS.register("igloo_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.IGLOO_CHEST));
+    public static final RegistryObject<Item> DESERT_PYRAMID_LOOT_BAG = ITEMS.register("desert_pyramid_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16),
+                    List.of(BuiltInLootTables.DESERT_PYRAMID, BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY, BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY)));
+    public static final RegistryObject<Item> WOODLAND_MANSION_LOOT_BAG = ITEMS.register("woodland_mansion_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.WOODLAND_MANSION));
+    public static final RegistryObject<Item> STRONGHOLD_LOOT_BAG = ITEMS.register("stronghold_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16),
+                    List.of(BuiltInLootTables.STRONGHOLD_CORRIDOR, BuiltInLootTables.STRONGHOLD_CROSSING, BuiltInLootTables.STRONGHOLD_LIBRARY)));
     public static final RegistryObject<Item> ANCIENT_CITY_LOOT_BAG = ITEMS.register("ancient_city_loot_bag",
-            () -> new AncientCityLootBagItem(new Item.Properties().stacksTo(16)));
+            () -> new LootBagItem(new Item.Properties().stacksTo(16),
+                    List.of(BuiltInLootTables.ANCIENT_CITY, BuiltInLootTables.ANCIENT_CITY_ICE_BOX)));
+
+    public static final RegistryObject<Item> RUINED_PORTAL_LOOT_BAG = ITEMS.register("ruined_portal_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.RUINED_PORTAL));
+    public static final RegistryObject<Item> NETHER_FORTRESS_LOOT_BAG = ITEMS.register("nether_fortress_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.NETHER_BRIDGE));
+    public static final RegistryObject<Item> BASTION_REMNANT_LOOT_BAG = ITEMS.register("bastion_remnant_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16),
+                    List.of(BuiltInLootTables.BASTION_TREASURE, BuiltInLootTables.BASTION_BRIDGE, BuiltInLootTables.BASTION_OTHER, BuiltInLootTables.BASTION_HOGLIN_STABLE)));
+
+    public static final RegistryObject<Item> END_CITY_LOOT_BAG = ITEMS.register("end_city_loot_bag",
+            () -> new LootBagItem(new Item.Properties().stacksTo(16), BuiltInLootTables.END_CITY_TREASURE));
+
     public static final RegistryObject<CreativeModeTab> DUNGEON_STASH_TAB = CREATIVE_MODE_TABS.register("dungeon_stash_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> DUNGEON_LOOT_BAG.get().getDefaultInstance())
@@ -76,6 +90,7 @@ public class DungeonStash {
                 output.accept(BASTION_REMNANT_LOOT_BAG.get());
                 output.accept(RUINED_PORTAL_LOOT_BAG.get());
                 output.accept(ANCIENT_CITY_LOOT_BAG.get());
+                output.accept(DESERT_PYRAMID_LOOT_BAG.get());
             }).build());
     public DungeonStash() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
