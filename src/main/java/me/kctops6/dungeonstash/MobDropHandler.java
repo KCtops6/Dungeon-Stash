@@ -1,6 +1,6 @@
 package me.kctops6.dungeonstash;
 
-import me.kctops6.dungeonstash.item.ThemedLootBagItem;
+import me.kctops6.dungeonstash.item.LootBagItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -107,7 +107,7 @@ public class MobDropHandler {
                 BuiltInLootTables.STRONGHOLD_LIBRARY
         };
         ResourceLocation chosen = tables[level.random.nextInt(tables.length)];
-        return new ThemedLootBagItem(new Item.Properties().stacksTo(16), chosen);
+        return new LootBagItem(new Item.Properties().stacksTo(16), chosen);
     }
     private static Item getRandomBastionTable(Level level) {
         ResourceLocation[] tables = {
@@ -117,6 +117,6 @@ public class MobDropHandler {
                 BuiltInLootTables.BASTION_HOGLIN_STABLE
         };
         ResourceLocation chosen = tables[level.random.nextInt(tables.length)];
-        return new ThemedLootBagItem(new Item.Properties().stacksTo(16), chosen);
+        return new LootBagItem(new Item.Properties().stacksTo(16), chosen);
     }
 }
